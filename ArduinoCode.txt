@@ -1,0 +1,22 @@
+
+const int xpin = A0;
+const int ypin = A1;
+
+void setup() 
+{
+  Serial.begin(9600);       //initialize the serial communication
+  pinMode(A0,INPUT);        //initialize the potentiometers inputs
+  pinMode(A1,INPUT);
+}
+
+void loop() 
+{
+  int xval = analogRead(xpin);
+  int yval = analogRead(ypin);
+  xval = map(xval, 0, 1022, 0, 10);   //mapping the joystick values for better control in unity
+  yval = map(yval, 0, 1022, 0, 10);
+  Serial.print(xval);
+  Serial.print(",");
+  Serial.println(yval);
+  delay(20);                          //Some delay to reduce lag
+}

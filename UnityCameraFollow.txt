@@ -1,0 +1,15 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class follow : MonoBehaviour
+{
+
+    public Transform player;    //Place the character that you want the camera to follow.
+    public Vector3 offset;      //Adds an offset so it looks better.
+
+    void Update()
+    {
+        transform.position = player.position + offset;
+    }
+}

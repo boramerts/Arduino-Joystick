@@ -1,0 +1,61 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.IO.Ports;      //Add this for serial.
+
+public class movement : MonoBehaviour
+{
+
+
+    public Rigidbody rb;
+
+    float x;
+    float y;
+
+
+    SerialPort stream = new SerialPort("COM3", 9600);   //Defines the serial port for control
+
+
+    private void Start()
+    {
+        if (stream != null)
+        {
+            if(stream.IsOpen)
+            {
+                stream.Close(); //Close the port if it is open already
+            }
+            else
+            {
+                stream.Open(); //Open port
+            }
+        }
+        else
+        {
+            if(stream.IsOpen)
+            {
+                print("port is open");
+            }
+            else
+            {
+                print("port == null");
+            }
+        }
+        Debug.Log("Open connection");       //Some stuff I found online to check if serial is working.
+    }
+
+    private void FixedUpdate()
+    {
+
+        string value = stream.ReadLine();   //Reads the data from serial.
+        stream.ReadTimeout = 25;            //Added to reduce lag
+        string[] vec2 = value.Split(',');   //Splits data with ,
+        if (vec2[0] != "" && vec2[1] != "") //Checks if vectors are empty or not.
+        {
+            float x1 = (float.Parse(vec2[0])-4)*6;      //You can change these numbers for better controls.
+            float y1 = -(float.Parse(vec2[1])-5)*6;
+            rb.AddForce(x1,  0, y1, ForceMode.Acceleration);    //Moves the object.
+            Debug.Log(x1 + "   " + y1);                         //Just to see if my garbage works.
+            stream.BaseStream.Flush(); //Clear the information
+        }
+    }
+}
